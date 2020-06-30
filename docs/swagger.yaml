@@ -1,0 +1,48 @@
+basePath: /
+definitions:
+  dto_book.Create:
+    properties:
+      name:
+        type: string
+      page:
+        type: integer
+    required:
+    - name
+    - page
+    type: object
+  dto_book.Full:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      page:
+        type: integer
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: This is a Jettster service APIs.
+  license: {}
+  title: Jettster Swagger API
+  version: "1.0"
+paths:
+  /book:
+    post:
+      consumes:
+      - application/json
+      operationId: create-book
+      parameters:
+      - description: the request body
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/dto_book.Create'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto_book.Full'
+      summary: Create Book
+swagger: "2.0"
