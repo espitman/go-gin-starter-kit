@@ -5,6 +5,7 @@ import (
 	model_book "jettster/model"
 	"jettster/utils"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -34,13 +35,21 @@ func CreateBook(c *gin.Context) {
 // @Router /book [get]
 func ListOfBooks(c *gin.Context) {
 	var query dto_book.List
-	err := c.Bind(&query)
+	err := c.BindQuery(&query)
 	if err != nil {
 		utils.HandleError(c, err)
 		return
 	}
-	skip := (query.Page - 1) * query.Count
-	books := model_book.List(query.Count, skip)
+	var count int64 = 10
+	var page int64 = 1
+	if query.Count != "" {
+		count, _ = strconv.ParseInt(query.Count, 10, 64)
+	}
+	if query.Page != "" {
+		page, _ = strconv.ParseInt(query.Page, 10, 64)
+	}
+	skip := (page - 1) * count
+	books := model_book.List(count, skip)
 	c.JSON(http.StatusOK, gin.H{
 		"books": books,
 	})
