@@ -14,7 +14,7 @@ import (
 // @Summary Create Book
 // @ID create-book
 // @Accept  json
-// @Param req body dto_book.Create true "the request body"
+// @Param body body dto_book.Create true "the request body"
 // @Success 200 {object} dto_book.Full
 // @Router /book [post]
 func CreateBook(c *gin.Context) {
@@ -30,7 +30,7 @@ func CreateBook(c *gin.Context) {
 
 // List of Book
 // @Summary List of Books
-// @Accept  json
+// @Param query query dto_book.List true "query params"
 // @Success 200 {object} dto_book.Summary
 // @Router /book [get]
 func ListOfBooks(c *gin.Context) {
@@ -53,4 +53,21 @@ func ListOfBooks(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"books": books,
 	})
+}
+
+// Single Book
+// @Summary Single Book
+// @Accept  json
+// @Param id path string true "url params"
+// @Success 200 {object} dto_book.Full
+// @Router /book/{id} [get]
+func SingleBook(c *gin.Context) {
+	var params dto_book.Details
+	err := c.BindUri(&params)
+	if err != nil {
+		utils.HandleError(c, err)
+		return
+	}
+	book := model_book.Get(params.ID)
+	c.JSON(http.StatusOK, book)
 }

@@ -44,5 +44,6 @@ func main() {
 
 	router.POST("/book", controller.CreateBook)
 	router.GET("/book", controller.ListOfBooks)
+	router.GET("/book/:id", controller.SingleBook)
 	_ = router.Run(":8080")
 }

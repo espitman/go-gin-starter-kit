@@ -30,6 +30,12 @@ func Create(name string, page int) *Book {
 	return book
 }
 
+func Get(id string) Book {
+	result := Book{}
+	_ = mgm.Coll(&Book{}).FindByID(id, &result)
+	return result
+}
+
 func List(count int64, skip int64) []Book {
 	result := []Book{}
 	findOptions := options.Find()

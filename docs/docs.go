@@ -27,6 +27,19 @@ var doc = `{
     "paths": {
         "/book": {
             "get": {
+                "summary": "List of Books",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "name": "count",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "page",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -45,12 +58,37 @@ var doc = `{
                 "parameters": [
                     {
                         "description": "the request body",
-                        "name": "req",
+                        "name": "body",
                         "in": "body",
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/dto_book.Create"
                         }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto_book.Full"
+                        }
+                    }
+                }
+            }
+        },
+        "/book/{id}": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "summary": "Single Book",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "url params",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -96,6 +134,17 @@ var doc = `{
                     "type": "integer"
                 },
                 "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto_book.List": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "string"
+                },
+                "page": {
                     "type": "string"
                 }
             }
