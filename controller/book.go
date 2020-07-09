@@ -30,7 +30,6 @@ func CreateBook(c *gin.Context) {
 // List of Book
 // @Summary List of Books
 // @Accept  json
-
 // @Success 200 {object} dto_book.Summary
 // @Router /book [get]
 func ListOfBooks(c *gin.Context) {
