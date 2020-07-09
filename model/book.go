@@ -30,10 +30,13 @@ func Create(name string, page int) *Book {
 	return book
 }
 
-func List(count int, page int) []Book {
+func List(count int64, skip int64) []Book {
 	result := []Book{}
 	findOptions := options.Find()
 	findOptions.SetSort(bson.M{"_id": -1})
+	findOptions.SetLimit(count)
+	findOptions.SetSkip(skip)
+
 	_ = mgm.Coll(&Book{}).SimpleFind(&result, bson.M{}, findOptions)
 	return result
 }

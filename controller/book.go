@@ -17,13 +17,13 @@ import (
 // @Success 200 {object} dto_book.Full
 // @Router /book [post]
 func CreateBook(c *gin.Context) {
-	var req dto_book.Create
-	err := c.BindJSON(&req)
+	var body dto_book.Create
+	err := c.BindJSON(&body)
 	if err != nil {
 		utils.HandleError(c, err)
 		return
 	}
-	book := model_book.Create(req.Name, req.Page)
+	book := model_book.Create(body.Name, body.Page)
 	c.JSON(http.StatusOK, book)
 }
 
@@ -33,14 +33,14 @@ func CreateBook(c *gin.Context) {
 // @Success 200 {object} dto_book.Summary
 // @Router /book [get]
 func ListOfBooks(c *gin.Context) {
-	// @Param req body dto_book.List true "the request body"
-	// var req dto_book.List
-	// err := c.BindJSON(&req)
-	// if err != nil {
-	// 	utils.HandleError(c, err)
-	// 	return
-	// }
-	books := model_book.List(10, 1)
+	var query dto_book.List
+	err := c.Bind(&query)
+	if err != nil {
+		utils.HandleError(c, err)
+		return
+	}
+	skip := (query.Page - 1) * query.Count
+	books := model_book.List(query.Count, skip)
 	c.JSON(http.StatusOK, gin.H{
 		"books": books,
 	})
