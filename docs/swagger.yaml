@@ -12,12 +12,23 @@ definitions:
     type: object
   dto_book.Full:
     properties:
-      id:
+      _id:
+        type: string
+      created_at:
         type: string
       name:
         type: string
       page:
         type: integer
+      updated_at:
+        type: string
+    type: object
+  dto_book.Summary:
+    properties:
+      books:
+        items:
+          $ref: '#/definitions/dto_book.Full'
+        type: array
     type: object
 host: localhost:8080
 info:
@@ -28,6 +39,12 @@ info:
   version: "1.0"
 paths:
   /book:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto_book.Summary'
     post:
       consumes:
       - application/json

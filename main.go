@@ -43,5 +43,6 @@ func main() {
 	router.GET("/ping", controller.Ping)
 
 	router.POST("/book", controller.CreateBook)
+	router.GET("/book", controller.ListOfBooks)
 	_ = router.Run(":8080")
 }

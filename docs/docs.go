@@ -26,6 +26,16 @@ var doc = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/book": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto_book.Summary"
+                        }
+                    }
+                }
+            },
             "post": {
                 "consumes": [
                     "application/json"
@@ -73,7 +83,10 @@ var doc = `{
         "dto_book.Full": {
             "type": "object",
             "properties": {
-                "id": {
+                "_id": {
+                    "type": "string"
+                },
+                "created_at": {
                     "type": "string"
                 },
                 "name": {
@@ -81,6 +94,20 @@ var doc = `{
                 },
                 "page": {
                     "type": "integer"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto_book.Summary": {
+            "type": "object",
+            "properties": {
+                "books": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto_book.Full"
+                    }
                 }
             }
         }
