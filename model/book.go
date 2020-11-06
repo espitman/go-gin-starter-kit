@@ -30,10 +30,14 @@ func Create(name string, page int) *Book {
 	return book
 }
 
-func Get(id string) Book {
+func Get(id string) (Book, error) {
 	result := Book{}
-	_ = mgm.Coll(&Book{}).FindByID(id, &result)
-	return result
+	error := mgm.Coll(&Book{}).FindByID(id, &result)
+
+	if error != nil {
+		return result, error
+	}
+	return result, nil
 }
 
 func List(count int64, skip int64) []Book {

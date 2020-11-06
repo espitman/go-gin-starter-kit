@@ -37,6 +37,13 @@ definitions:
           $ref: '#/definitions/dto_book.Full'
         type: array
     type: object
+  dto_error.Error:
+    properties:
+      error:
+        type: string
+      status:
+        type: integer
+    type: object
 host: localhost:8080
 info:
   contact: {}
@@ -59,6 +66,10 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/dto_book.Summary'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto_error.Error'
       summary: List of Books
     post:
       consumes:
@@ -76,6 +87,10 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/dto_book.Full'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto_error.Error'
       summary: Create Book
   /book/{id}:
     get:
@@ -92,5 +107,13 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/dto_book.Full'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto_error.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto_error.Error'
       summary: Single Book
 swagger: "2.0"

@@ -46,6 +46,12 @@ var doc = `{
                         "schema": {
                             "$ref": "#/definitions/dto_book.Summary"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/dto_error.Error"
+                        }
                     }
                 }
             },
@@ -72,6 +78,12 @@ var doc = `{
                         "schema": {
                             "$ref": "#/definitions/dto_book.Full"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/dto_error.Error"
+                        }
                     }
                 }
             }
@@ -96,6 +108,18 @@ var doc = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/dto_book.Full"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/dto_error.Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/dto_error.Error"
                         }
                     }
                 }
@@ -157,6 +181,17 @@ var doc = `{
                     "items": {
                         "$ref": "#/definitions/dto_book.Full"
                     }
+                }
+            }
+        },
+        "dto_error.Error": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "integer"
                 }
             }
         }

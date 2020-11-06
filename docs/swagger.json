@@ -31,6 +31,12 @@
                         "schema": {
                             "$ref": "#/definitions/dto_book.Summary"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/dto_error.Error"
+                        }
                     }
                 }
             },
@@ -57,6 +63,12 @@
                         "schema": {
                             "$ref": "#/definitions/dto_book.Full"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/dto_error.Error"
+                        }
                     }
                 }
             }
@@ -81,6 +93,18 @@
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/dto_book.Full"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/dto_error.Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/dto_error.Error"
                         }
                     }
                 }
@@ -142,6 +166,17 @@
                     "items": {
                         "$ref": "#/definitions/dto_book.Full"
                     }
+                }
+            }
+        },
+        "dto_error.Error": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "integer"
                 }
             }
         }
