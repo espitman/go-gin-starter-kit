@@ -3,7 +3,8 @@ package main
 import (
 	"jettster/controller"
 	"jettster/middleware"
-	db "jettster/provider"
+	"jettster/provider/config"
+	"jettster/provider/db"
 	"time"
 
 	_ "jettster/docs"
@@ -21,10 +22,12 @@ func init() {
 // @title Jettster Swagger API
 // @version 1.0
 // @description This is a Jettster service APIs.
-// @host localhost:8080
 // @BasePath /
 
 func main() {
+
+	PORT := config.GetString("port")
+
 	router := gin.New()
 	router.Use(cors.Middleware(cors.Config{
 		Origins:         "*",
@@ -36,7 +39,7 @@ func main() {
 		ValidateHeaders: false,
 	}))
 
-	url := ginSwagger.URL("http://localhost:8080/swagger/doc.json") // The url pointing to API definition
+	url := ginSwagger.URL("http://localhost:" + PORT + "/swagger/doc.json") // The url pointing to API definition
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
 
 	router.Use(middleware.SetJsonHeader)
@@ -45,5 +48,5 @@ func main() {
 	router.POST("/book", controller.CreateBook)
 	router.GET("/book", controller.ListOfBooks)
 	router.GET("/book/:id", controller.SingleBook)
-	_ = router.Run(":8080")
+	_ = router.Run(":" + PORT)
 }

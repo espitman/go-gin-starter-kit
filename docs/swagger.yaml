@@ -44,7 +44,6 @@ definitions:
       status:
         type: integer
     type: object
-host: localhost:8080
 info:
   contact: {}
   description: This is a Jettster service APIs.

@@ -1,0 +1,6 @@
+{
+  "port": 8080,
+  "db": {
+    "uri": "mongodb://username:password@localhost:27017?retryWrites=false"
+  }
+}
