@@ -2,6 +2,7 @@ package model_book
 
 import (
 	"fmt"
+	"jettster/provider/redis"
 
 	"github.com/Kamva/mgm"
 	"go.mongodb.org/mongo-driver/bson"
@@ -27,13 +28,13 @@ func Create(name string, page int) *Book {
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	return book
 }
 
 func Get(id string) (Book, error) {
 	result := Book{}
 	error := mgm.Coll(&Book{}).FindByID(id, &result)
-
 	if error != nil {
 		return result, error
 	}
@@ -48,5 +49,7 @@ func List(count int64, skip int64) []Book {
 	findOptions.SetSkip(skip)
 
 	_ = mgm.Coll(&Book{}).SimpleFind(&result, bson.M{}, findOptions)
+	name, _ := redis.Get("name")
+	fmt.Println(name)
 	return result
 }
