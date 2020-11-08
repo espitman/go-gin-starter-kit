@@ -6,8 +6,18 @@ The fast way to create a restful apis with Gin Framework with a structured proje
 copy & rename config/default-sample.json to default.json
 
 ### run in development mode
-`go run main.go`
+```
+go run main.go
+```
+
+for auto reload
+
+```
+gin -i --notifications run main.go
+```
 
 ### create swagger 
-`swag init`
+```
+swag init
+```
  http://localhost:8080/swagger/index.html
