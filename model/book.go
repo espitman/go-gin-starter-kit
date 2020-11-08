@@ -2,7 +2,6 @@ package model_book
 
 import (
 	"fmt"
-	"jettster/provider/redis"
 
 	"github.com/Kamva/mgm"
 	"go.mongodb.org/mongo-driver/bson"
@@ -49,7 +48,5 @@ func List(count int64, skip int64) []Book {
 	findOptions.SetSkip(skip)
 
 	_ = mgm.Coll(&Book{}).SimpleFind(&result, bson.M{}, findOptions)
-	name, _ := redis.Get("name")
-	fmt.Println(name)
 	return result
 }

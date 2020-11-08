@@ -1,5 +1,5 @@
 # go-gin-starter-kit
-The fastest way to create a restful api's with Gin Framework with a structured project that defaults to mongodb database
+The fast way to create a restful apis with Gin Framework with a structured project that defaults to mongodb and redis 
 
 ### how to start
 
