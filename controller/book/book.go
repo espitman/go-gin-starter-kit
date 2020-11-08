@@ -1,4 +1,4 @@
-package controller
+package bookController
 
 import (
 	dto_book "jettster/dto/book/request"
@@ -18,7 +18,7 @@ import (
 // @Success 200 {object} dto_book.Full
 // @Failure 400 {object} dto_error.Error
 // @Router /book [post]
-func CreateBook(c *gin.Context) {
+func Create(c *gin.Context) {
 	var body dto_book.Create
 	err := c.BindJSON(&body)
 	if err != nil {
@@ -35,7 +35,7 @@ func CreateBook(c *gin.Context) {
 // @Success 200 {object} dto_book.Summary
 // @Failure 400 {object} dto_error.Error
 // @Router /book [get]
-func ListOfBooks(c *gin.Context) {
+func List(c *gin.Context) {
 	var query dto_book.List
 	err := c.BindQuery(&query)
 	if err != nil {
@@ -65,7 +65,7 @@ func ListOfBooks(c *gin.Context) {
 // @Failure 400 {object} dto_error.Error
 // @Failure 404 {object} dto_error.Error
 // @Router /book/{id} [get]
-func SingleBook(c *gin.Context) {
+func Single(c *gin.Context) {
 	var params dto_book.Details
 	err := c.BindUri(&params)
 	if err != nil {

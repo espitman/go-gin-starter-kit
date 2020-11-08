@@ -1,11 +1,13 @@
 package main
 
 import (
-	"jettster/controller"
 	"jettster/middleware"
 	"jettster/provider/config"
 	"jettster/provider/db"
 	"time"
+
+	bookController "jettster/controller/book"
+	pingController "jettster/controller/ping"
 
 	_ "jettster/docs"
 
@@ -43,10 +45,10 @@ func main() {
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
 
 	router.Use(middleware.SetJsonHeader)
-	router.GET("/ping", controller.Ping)
+	router.GET("/ping", pingController.Ping)
 
-	router.POST("/book", controller.CreateBook)
-	router.GET("/book", controller.ListOfBooks)
-	router.GET("/book/:id", controller.SingleBook)
+	router.POST("/book", bookController.Create)
+	router.GET("/book", bookController.List)
+	router.GET("/book/:id", bookController.Single)
 	_ = router.Run(":" + PORT)
 }
