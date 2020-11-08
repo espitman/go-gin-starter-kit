@@ -18,3 +18,4 @@
 /.vscode
 
 config/default.json
+gin-bin
