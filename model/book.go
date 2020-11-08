@@ -27,13 +27,13 @@ func Create(name string, page int) *Book {
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	return book
 }
 
 func Get(id string) (Book, error) {
 	result := Book{}
 	error := mgm.Coll(&Book{}).FindByID(id, &result)
-
 	if error != nil {
 		return result, error
 	}
