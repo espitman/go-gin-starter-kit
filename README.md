@@ -7,13 +7,7 @@ copy & rename config/default-sample.json to default.json
 
 ### run in development mode
 ```
-go run main.go
-```
-
-for auto reload
-
-```
-gin -i --notifications run main.go
+gin -i --notifications run start
 ```
 
 ### create swagger 
