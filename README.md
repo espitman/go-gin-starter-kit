@@ -15,3 +15,10 @@ gin -i --notifications run start
 swag init
 ```
  http://localhost:8080/swagger/index.html
+
+## CLI
+
+### create controller
+```
+go run main.go generate controller {$name}     
+```
