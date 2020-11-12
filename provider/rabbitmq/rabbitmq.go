@@ -8,12 +8,14 @@ import (
 
 var connection *amqp.Connection
 var channel *amqp.Channel
+var exchanges map[string]bool
 var queuse map[string]amqp.Queue
 
 func init() {
 	fmt.Println(".:::AMQP:::.")
 	connection = connect()
 	channel = CreateChannel()
+	exchanges = make(map[string]bool)
 	queuse = make(map[string]amqp.Queue)
 }
 
@@ -35,33 +37,55 @@ func CreateChannel() *amqp.Channel {
 	return channel
 }
 
-func QueueDeclare(queueName string, durable bool) amqp.Queue {
-	_, ok := queuse[queueName]
-	if ok {
-		return queuse[queueName]
+func ExchangeDeclare(exchangeName string, exchangeType string, durable bool) {
+	_, ok := exchanges[exchangeName]
+	if !ok {
+		err := channel.ExchangeDeclare(
+			exchangeName,
+			exchangeType,
+			durable, // durable
+			false,   // auto-deleted
+			false,   // internal
+			false,   // no-wait
+			nil,     // arguments
+		)
+		if err != nil {
+			panic("Failed to declare a queue:" + err.Error())
+		}
+		exchanges[exchangeName] = true
 	}
-	q, err := channel.QueueDeclare(
-		queueName,
-		durable,
-		false, // delete when unused
-		false, // exclusive
-		false, // no-wait
-		nil,   // arguments
-	)
-	if err != nil {
-		panic("Failed to declare a queue:" + err.Error())
-	}
-	queuse[queueName] = q
-	return q
 }
 
-func Publish(queueName string, body string) {
-	queue := QueueDeclare(queueName, false)
+func QueueDeclare(queueName string, durable bool) {
+	_, ok := queuse[queueName]
+	if !ok {
+		q, err := channel.QueueDeclare(
+			queueName,
+			durable,
+			false, // delete when unused
+			false, // exclusive
+			false, // no-wait
+			nil,   // arguments
+		)
+		if err != nil {
+			panic("Failed to declare a queue:" + err.Error())
+		}
+		queuse[queueName] = q
+	}
+}
+
+func CreatePublisher(exchangeName string, exchangeType string, durable bool, queueName string) {
+	ExchangeDeclare(exchangeName, exchangeType, durable)
+	QueueDeclare(queueName, false)
+
+}
+
+func Publish(exchangeName string, queueName string, body string) {
 	err := channel.Publish(
-		"",         // exchange
-		queue.Name, // routing key
-		false,      // mandatory
-		false,      // immediate
+		exchangeName, // exchange
+		queueName,    // routing key
+		false,        // mandatory
+		false,        // immediate
 		amqp.Publishing{
 			ContentType: "text/plain",
 			Body:        []byte(body),

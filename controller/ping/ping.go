@@ -1,13 +1,18 @@
 package pingController
 
 import (
+	"jettster/provider/rabbitmq"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
-// Ping ...
+func init() {
+	rabbitmq.CreatePublisher("ginTestExchange", "direct", true, "ginTestQueue")
+}
+
 func Ping(c *gin.Context) {
+	rabbitmq.Publish("ginTestExchange", "ginTest", "hi from gin test")
 	c.JSON(http.StatusOK, gin.H{
 		"message": "pong",
 	})
