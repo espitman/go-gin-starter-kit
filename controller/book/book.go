@@ -2,7 +2,7 @@ package bookController
 
 import (
 	dto_book "jettster/dto/book/request"
-	model_book "jettster/model"
+	model_book "jettster/model/book"
 	"jettster/utils"
 	"net/http"
 	"strconv"

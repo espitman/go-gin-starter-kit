@@ -7,13 +7,7 @@ copy & rename config/default-sample.json to default.json
 
 ### run in development mode
 ```
-go run main.go
-```
-
-for auto reload
-
-```
-gin -i --notifications run main.go
+gin -i --notifications run start
 ```
 
 ### create swagger 
@@ -21,3 +15,20 @@ gin -i --notifications run main.go
 swag init
 ```
  http://localhost:8080/swagger/index.html
+
+## CLI
+
+### create controller
+```
+go run main.go generate controller {$name}     
+```
+
+### create model
+```
+go run main.go generate model {$name}     
+```
+
+### create dto
+```
+go run main.go generate dto {$name}     
+```
