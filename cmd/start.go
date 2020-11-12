@@ -3,6 +3,7 @@ package cmd
 import (
 	"jettster/middleware"
 	"jettster/provider/config"
+	"jettster/route"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -10,10 +11,6 @@ import (
 	"github.com/spf13/cobra"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
-
-	bookController "jettster/controller/book"
-	bozController "jettster/controller/boz"
-	pingController "jettster/controller/ping"
 )
 
 var startCmd = &cobra.Command{
@@ -43,13 +40,7 @@ to quickly create a Cobra application.`,
 		router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
 
 		router.Use(middleware.SetJsonHeader)
-		router.GET("/ping", pingController.Ping)
-
-		router.POST("/book", bookController.Create)
-		router.GET("/book", bookController.List)
-		router.GET("/book/:id", bookController.Single)
-
-		router.GET("/boz/ping", bozController.Ping)
+		route.GetRoutes(router)
 
 		_ = router.Run(":" + PORT)
 	},
@@ -57,5 +48,4 @@ to quickly create a Cobra application.`,
 
 func init() {
 	rootCmd.AddCommand(startCmd)
-
 }
