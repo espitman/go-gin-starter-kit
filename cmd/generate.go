@@ -22,6 +22,8 @@ var generateCmd = &cobra.Command{
 		if what == "controller" {
 			createController(args[1])
 			createRoute(args[1])
+		} else if what == "model" {
+			createModel(args[1])
 		}
 		os.Exit(1)
 	},
@@ -37,12 +39,10 @@ func createController(name string) {
 	f.Func().Id("Ping").Params(Id("c").Params(Add(Op("*")).Qual("github.com/gin-gonic/gin", "Context"))).Block(
 		Id("c.JSON").Params(Qual("net/http", "StatusOK"), Id("gin.H{\"message\": \""+name+"\",}")),
 	)
-
 	buf := &bytes.Buffer{}
 	if err := f.Render(buf); err != nil {
 		panic(err)
 	}
-
 	dir := os.Mkdir("./controller/"+name, 0777)
 	fmt.Println(dir)
 	if err := ioutil.WriteFile("./controller/"+name+"/"+name+".go", buf.Bytes(), 0644); err != nil {
@@ -54,18 +54,31 @@ func createRoute(name string) {
 	fmt.Println("createRoute: " + name)
 	f := NewFile("route")
 	f.ImportAlias("jettster/controller/"+name, name+"Controller")
-
 	f.Func().Id("(t *T)").Id(strings.Title(name) + "Routes").Params().Block(
 		Id("t.router.GET").Params(Id("\"/"+name+"/ping\""), Qual("jettster/controller/"+name, "Ping")),
 	)
-
 	buf := &bytes.Buffer{}
 	if err := f.Render(buf); err != nil {
 		panic(err)
 	}
-
 	if err := ioutil.WriteFile("./route/"+name+".go", buf.Bytes(), 0644); err != nil {
 		panic(err)
 	}
+}
 
+func createModel(name string) {
+	fmt.Println("createModel: " + name)
+	f := NewFile("model_" + name)
+	f.Type().Id("Boz").Struct(
+		Qual("github.com/Kamva/mgm", "DefaultModel").Id("`bson:\",inline\"`"),
+	)
+	buf := &bytes.Buffer{}
+	if err := f.Render(buf); err != nil {
+		panic(err)
+	}
+	dir := os.Mkdir("./model/"+name, 0777)
+	fmt.Println(dir)
+	if err := ioutil.WriteFile("./model/"+name+"/"+name+".go", buf.Bytes(), 0644); err != nil {
+		panic(err)
+	}
 }
