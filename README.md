@@ -22,3 +22,13 @@ swag init
 ```
 go run main.go generate controller {$name}     
 ```
+
+### create model
+```
+go run main.go generate model {$name}     
+```
+
+### create dto
+```
+go run main.go generate dto {$name}     
+```
