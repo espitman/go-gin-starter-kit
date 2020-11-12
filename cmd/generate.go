@@ -5,13 +5,13 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"strings"
 
 	. "github.com/dave/jennifer/jen"
 
 	"github.com/spf13/cobra"
 )
 
-// generateCmd represents the generate command
 var generateCmd = &cobra.Command{
 	Use:   "generate",
 	Short: "generate go gin starter kit",
@@ -21,6 +21,7 @@ var generateCmd = &cobra.Command{
 		what := args[0]
 		if what == "controller" {
 			createController(args[1])
+			createRoute(args[1])
 		}
 		os.Exit(1)
 	},
@@ -47,4 +48,24 @@ func createController(name string) {
 	if err := ioutil.WriteFile("./controller/"+name+"/"+name+".go", buf.Bytes(), 0644); err != nil {
 		panic(err)
 	}
+}
+
+func createRoute(name string) {
+	fmt.Println("createRoute: " + name)
+	f := NewFile("route")
+	f.ImportAlias("jettster/controller/"+name, name+"Controller")
+
+	f.Func().Id("(t *T)").Id(strings.Title(name) + "Routes").Params().Block(
+		Id("t.router.GET").Params(Id("\"/"+name+"/ping\""), Qual("jettster/controller/"+name, "Ping")),
+	)
+
+	buf := &bytes.Buffer{}
+	if err := f.Render(buf); err != nil {
+		panic(err)
+	}
+
+	if err := ioutil.WriteFile("./route/"+name+".go", buf.Bytes(), 0644); err != nil {
+		panic(err)
+	}
+
 }
