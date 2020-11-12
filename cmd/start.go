@@ -12,10 +12,10 @@ import (
 	"github.com/swaggo/gin-swagger/swaggerFiles"
 
 	bookController "jettster/controller/book"
+	bozController "jettster/controller/boz"
 	pingController "jettster/controller/ping"
 )
 
-// startCmd represents the start command
 var startCmd = &cobra.Command{
 	Use:   "start",
 	Short: "A brief description of your command",
@@ -48,6 +48,9 @@ to quickly create a Cobra application.`,
 		router.POST("/book", bookController.Create)
 		router.GET("/book", bookController.List)
 		router.GET("/book/:id", bookController.Single)
+
+		router.GET("/boz/ping", bozController.Ping)
+
 		_ = router.Run(":" + PORT)
 	},
 }
