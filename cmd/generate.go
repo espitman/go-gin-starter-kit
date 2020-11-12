@@ -24,6 +24,8 @@ var generateCmd = &cobra.Command{
 			createRoute(args[1])
 		} else if what == "model" {
 			createModel(args[1])
+		} else if what == "dto" {
+			createDto(args[1])
 		}
 		os.Exit(1)
 	},
@@ -69,7 +71,7 @@ func createRoute(name string) {
 func createModel(name string) {
 	fmt.Println("createModel: " + name)
 	f := NewFile("model_" + name)
-	f.Type().Id("Boz").Struct(
+	f.Type().Id(strings.Title(name)).Struct(
 		Qual("github.com/Kamva/mgm", "DefaultModel").Id("`bson:\",inline\"`"),
 	)
 	buf := &bytes.Buffer{}
@@ -79,6 +81,46 @@ func createModel(name string) {
 	dir := os.Mkdir("./model/"+name, 0777)
 	fmt.Println(dir)
 	if err := ioutil.WriteFile("./model/"+name+"/"+name+".go", buf.Bytes(), 0644); err != nil {
+		panic(err)
+	}
+}
+
+func createDto(name string) {
+	fmt.Println("createDto: " + name)
+	dir := os.Mkdir("./dto/"+name, 0777)
+	fmt.Println(dir)
+	dir = os.Mkdir("./dto/"+name+"/request", 0777)
+	fmt.Println(dir)
+	dir = os.Mkdir("./dto/"+name+"/response", 0777)
+	fmt.Println(dir)
+	createRequestDto(name)
+	createResponseDto(name)
+}
+
+func createRequestDto(name string) {
+	f := NewFile("dto_" + name)
+	f.Type().Id("Details").Struct(
+		Id("ID").String().Id("`uri:\"id\"`"),
+	)
+	buf := &bytes.Buffer{}
+	if err := f.Render(buf); err != nil {
+		panic(err)
+	}
+	if err := ioutil.WriteFile("./dto/"+name+"/request/details.dto.go", buf.Bytes(), 0644); err != nil {
+		panic(err)
+	}
+}
+
+func createResponseDto(name string) {
+	f := NewFile("dto_" + name)
+	f.Type().Id("Full").Struct(
+		Id("ID").Qual("go.mongodb.org/mongo-driver/bson/primitive", "ObjectID").Id("`json:\"_id\"`"),
+	)
+	buf := &bytes.Buffer{}
+	if err := f.Render(buf); err != nil {
+		panic(err)
+	}
+	if err := ioutil.WriteFile("./dto/"+name+"/response/full.dto.go", buf.Bytes(), 0644); err != nil {
 		panic(err)
 	}
 }
