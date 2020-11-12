@@ -95,10 +95,21 @@ func Publish(exchangeName string, queueName string, body string) {
 	}
 }
 
-func Consume(queueName string) <-chan amqp.Delivery {
-	msgs, err := channel.Consume(queueName, "", false, false, false, false, nil)
+func QueueBind(exchangeName string, queueName string) {
+	err := channel.QueueBind(
+		queueName,
+		queueName, // routing key
+		exchangeName,
+		false,
+		nil,
+	)
 	if err != nil {
-		panic("error consuming the queue: " + err.Error())
+		panic("Failed to publish a messagel:" + err.Error())
 	}
-	return msgs
+
+}
+
+func Consume(exchangeName string, queueName string) (<-chan amqp.Delivery, error) {
+	QueueBind(exchangeName, queueName)
+	return channel.Consume(queueName, "", false, false, false, false, nil)
 }

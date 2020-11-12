@@ -12,7 +12,7 @@ func init() {
 }
 
 func Ping(c *gin.Context) {
-	rabbitmq.Publish("ginTestExchange", "ginTest", "hi from gin test")
+	rabbitmq.Publish("ginTestExchange", "ginTestQueue", "hi from gin test")
 	c.JSON(http.StatusOK, gin.H{
 		"message": "pong",
 	})
