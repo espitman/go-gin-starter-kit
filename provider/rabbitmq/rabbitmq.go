@@ -1,8 +1,6 @@
 package rabbitmq
 
 import (
-	"fmt"
-
 	"github.com/streadway/amqp"
 )
 
@@ -12,7 +10,6 @@ var exchanges map[string]bool
 var queuse map[string]amqp.Queue
 
 func init() {
-	fmt.Println(".:::AMQP:::.")
 	connection = connect()
 	channel = CreateChannel()
 	exchanges = make(map[string]bool)

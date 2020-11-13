@@ -5,6 +5,7 @@ import (
 	"jettster/provider/rabbitmq"
 )
 
+
 func (t *T) BozConsumer() {
 	msgs, _ := rabbitmq.Consume("ginTestExchange2", "ginTestQueue2")
 	forever := make(chan bool)
