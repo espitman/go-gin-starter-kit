@@ -20,6 +20,22 @@ swag init
 
 http://localhost:8080/swagger/index.html
 
+## RabbitMQ
+
+### publish message
+
+first create publisher (on init of package)
+
+```
+rabbitmq.CreatePublisher(exchangeName string, exchangeType string, durable bool, queueName string)
+```
+
+next publish message
+
+```
+rabbitmq.Publish(exchangeName string, queueName string, body string)
+```
+
 ## CLI
 
 ### create controller
@@ -40,18 +56,8 @@ go run main.go generate model {$name}
 go run main.go generate dto {$name}
 ```
 
-## RabbitMQ
-
-### publish message
-
-first create publisher (on init of package)
+### create consumer
 
 ```
-rabbitmq.CreatePublisher(exchangeName string, exchangeType string, durable bool, queueName string)
-```
-
-next publish message
-
-```
-rabbitmq.Publish(exchangeName string, queueName string, body string)
+go run main.go generate consumer {$name}
 ```
