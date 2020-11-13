@@ -26,6 +26,8 @@ var generateCmd = &cobra.Command{
 			createModel(args[1])
 		} else if what == "dto" {
 			createDto(args[1])
+		} else if what == "consumer" {
+			createConsumer(args[1])
 		}
 		os.Exit(1)
 	},
@@ -121,6 +123,32 @@ func createResponseDto(name string) {
 		panic(err)
 	}
 	if err := ioutil.WriteFile("./dto/"+name+"/response/full.dto.go", buf.Bytes(), 0644); err != nil {
+		panic(err)
+	}
+}
+
+func createConsumer(name string) {
+	f := NewFile("consumer")
+
+	f.Func().Params(Id("t *T")).Id(strings.Title(name)+"Consumer").Params().Block(
+		Id("msgs, _ :=").Qual("jettster/provider/rabbitmq", "Consume").Call(Id("\"ginTestExchange\""), Id("\"ginTestQueue\"")),
+		Id("forever :=").Make(Chan().Bool()),
+		Id("go func").Params().Block(
+			Id("for msg := range msgs").Block(
+				Id("body := ").Id("string(msg.Body)"),
+				Qual("fmt", "Println").Call(Id("\""+name+"Consumer::: "+"\"").Op("+").Id("\"message received:\" ").Op("+").Id(" body")),
+				//	_ = msg.Ack(true)
+				Id("_ =").Id("msg.Ack(true)"),
+			),
+		).Call(),
+		Id("	<-forever"),
+	)
+
+	buf := &bytes.Buffer{}
+	if err := f.Render(buf); err != nil {
+		panic(err)
+	}
+	if err := ioutil.WriteFile("./worker/consumer/"+name+".go", buf.Bytes(), 0644); err != nil {
 		panic(err)
 	}
 }
