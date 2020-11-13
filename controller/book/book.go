@@ -3,12 +3,17 @@ package bookController
 import (
 	dto_book "jettster/dto/book/request"
 	model_book "jettster/model/book"
+	"jettster/provider/rabbitmq"
 	"jettster/utils"
 	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
+
+func init() {
+	rabbitmq.CreatePublisher("ginTestExchange2", "fanout", true, "ginTestQueue2")
+}
 
 // Create Book
 // @Summary Create Book
@@ -52,6 +57,7 @@ func List(c *gin.Context) {
 	}
 	skip := (page - 1) * count
 	books := model_book.List(count, skip)
+	rabbitmq.Publish("ginTestExchange2", "ginTestQueue2", "hi from gin test")
 	c.JSON(http.StatusOK, gin.H{
 		"books": books,
 	})

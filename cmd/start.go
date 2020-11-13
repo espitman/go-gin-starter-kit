@@ -21,7 +21,7 @@ var startCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		PORT := config.GetString("port")
 
-		go consumer.TestConsumer()
+		consumer.Start()
 
 		router := gin.New()
 		router.Use(cors.Middleware(cors.Config{
