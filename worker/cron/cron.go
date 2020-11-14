@@ -33,6 +33,6 @@ func Run() {
 	}
 	var t T
 	for _, file := range files {
-		go reflect.ValueOf(&t).MethodByName(strings.Title(file) + "Run").Call([]reflect.Value{})
+		reflect.ValueOf(&t).MethodByName(strings.Title(file) + "Run").Call([]reflect.Value{})
 	}
 }

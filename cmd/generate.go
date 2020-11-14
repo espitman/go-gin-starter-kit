@@ -28,6 +28,8 @@ var generateCmd = &cobra.Command{
 			createDto(args[1])
 		} else if what == "consumer" {
 			createConsumer(args[1])
+		} else if what == "cron" {
+			createCron(args[1])
 		}
 		os.Exit(1)
 	},
@@ -129,7 +131,6 @@ func createResponseDto(name string) {
 
 func createConsumer(name string) {
 	f := NewFile("consumer")
-
 	f.Func().Params(Id("t *T")).Id(strings.Title(name)+"Consumer").Params().Block(
 		Id("msgs, _ :=").Qual("jettster/provider/rabbitmq", "Consume").Call(Id("\"ginTestExchange\""), Id("\"ginTestQueue\"")),
 		Id("forever :=").Make(Chan().Bool()),
@@ -149,6 +150,32 @@ func createConsumer(name string) {
 		panic(err)
 	}
 	if err := ioutil.WriteFile("./worker/consumer/"+name+".go", buf.Bytes(), 0644); err != nil {
+		panic(err)
+	}
+}
+
+func createCron(name string) {
+	f := NewFile("cron")
+
+	f.Func().Id(strings.Title(name) + "Task").Params().Block(
+		Qual("fmt", "Println").Call(Id("\"I am running " + strings.Title(name) + "Task.\"")),
+	)
+	// func (t *T) TestRun() {
+	// 	s1 := gocron.NewScheduler(time.UTC)
+	// 	_, _ = s1.Every(1).Seconds().Do(TestTask)
+	// 	s1.StartAsync()
+	// }
+	f.Func().Id("(t *T)").Id(strings.Title(name)+"Run").Params().Block(
+		Id("s1:=").Qual("github.com/go-co-op/gocron", "NewScheduler").Params(Qual("time", "UTC")),
+		Id("_, _ =").Id("s1.Every(1).Seconds().Do("+strings.Title(name)+"Task)"),
+		Id("s1.StartAsync()"),
+	)
+
+	buf := &bytes.Buffer{}
+	if err := f.Render(buf); err != nil {
+		panic(err)
+	}
+	if err := ioutil.WriteFile("./worker/cron/"+name+".go", buf.Bytes(), 0644); err != nil {
 		panic(err)
 	}
 }
