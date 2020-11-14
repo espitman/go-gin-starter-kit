@@ -1,6 +1,6 @@
 # go-gin-starter-kit
 
-The fast way to create a restful apis with Gin Framework with a structured project that defaults to mongodb and redis and rabbitMQ
+The fast way to create a restful apis with Gin Framework with a structured project that defaults to mongodb and redis and rabbitMQ and cron
 
 ## how to start
 
@@ -60,4 +60,10 @@ go run main.go generate dto {$name}
 
 ```
 go run main.go generate consumer {$name}
+```
+
+### create cron
+
+```
+go run main.go generate cron {$name}
 ```
