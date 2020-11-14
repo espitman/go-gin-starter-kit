@@ -5,6 +5,7 @@ import (
 	"jettster/provider/config"
 	"jettster/route"
 	"jettster/worker/consumer"
+	"jettster/worker/cron"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -39,6 +40,8 @@ var startCmd = &cobra.Command{
 
 		router.Use(middleware.SetJsonHeader)
 		route.GetRoutes(router)
+
+		cron.Run()
 
 		_ = router.Run(":" + PORT)
 	},
