@@ -2,6 +2,7 @@ package elk
 
 import (
 	"context"
+	"jettster/provider/config"
 
 	"github.com/olivere/elastic"
 )
@@ -9,7 +10,7 @@ import (
 var client *elastic.Client
 
 func init() {
-	var cl, err = elastic.NewSimpleClient(elastic.SetURL("https://67yzvvqhca:bwljjiblg1@gin-6369977968.us-east-1.bonsaisearch.net:443"))
+	var cl, err = elastic.NewSimpleClient(elastic.SetURL(config.GetString("elastic.url")))
 	if err != nil {
 		panic(err)
 	}

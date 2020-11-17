@@ -7,5 +7,11 @@
     "url": "localhost:6379",
     "password": "",
     "db": 0
+  },
+  "rabbitmq": {
+    "url": "http://localhost:15672/"
+  },
+  "elastic": {
+    "url": "http://localhost:9200/"
   }
 }
