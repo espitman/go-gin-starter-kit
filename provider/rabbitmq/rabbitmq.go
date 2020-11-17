@@ -1,6 +1,8 @@
 package rabbitmq
 
 import (
+	"jettster/provider/config"
+
 	"github.com/streadway/amqp"
 )
 
@@ -17,7 +19,7 @@ func init() {
 }
 
 func connect() *amqp.Connection {
-	url := "amqp://hjguplwm:I-wumDDxm3KgPbyATuFGplnJ5POkO_Hp@lion.rmq.cloudamqp.com/hjguplwm"
+	url := config.GetString("rabbitmq.url")
 	connection, err := amqp.Dial(url)
 	if err != nil {
 		panic("could not establish connection with RabbitMQ:" + err.Error())

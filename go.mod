@@ -23,6 +23,7 @@ require (
 	github.com/json-iterator/go v1.1.10 // indirect
 	github.com/mailru/easyjson v0.7.1 // indirect
 	github.com/mattn/go-shellwords v1.0.10 // indirect
+	github.com/olivere/elastic v6.2.35+incompatible
 	github.com/spf13/cobra v1.1.1
 	github.com/spf13/viper v1.7.1
 	github.com/streadway/amqp v1.0.0

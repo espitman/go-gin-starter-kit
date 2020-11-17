@@ -1,6 +1,6 @@
 # go-gin-starter-kit
 
-The fast way to create a restful apis with Gin Framework with a structured project that defaults to mongodb and redis and rabbitMQ and cron
+The fast way to create a restful apis with Gin Framework with a structured project that defaults to mongodb and redis and rabbitMQ and cron and elastic search
 
 ## how to start
 
@@ -34,6 +34,21 @@ next publish message
 
 ```
 rabbitmq.Publish(exchangeName string, queueName string, body string)
+```
+
+## elastic search
+
+### sample
+
+```
+type Tweet struct {
+	User    string `json:"user"`
+	Message string `json:"message"`
+}
+
+elk.CreateIndex("tweets")
+tweet := Tweet{User: "username", Message: "message"}
+result := elk.AddData("tweets", "doc", tweet)
 ```
 
 ## CLI
