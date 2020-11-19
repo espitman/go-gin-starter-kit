@@ -4,7 +4,6 @@ import (
 	dto_book "jettster/dto/book/request"
 	model_book "jettster/model/book"
 	"jettster/utils"
-	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -26,7 +25,9 @@ func Create(c *gin.Context) {
 		return
 	}
 	book := model_book.Create(body.Name, body.Page)
-	c.JSON(http.StatusOK, book)
+	utils.FormatResponse(c, gin.H{
+		"book": book,
+	})
 }
 
 // List of Book
@@ -52,7 +53,7 @@ func List(c *gin.Context) {
 	}
 	skip := (page - 1) * count
 	books := model_book.List(count, skip)
-	c.JSON(http.StatusOK, gin.H{
+	utils.FormatResponse(c, gin.H{
 		"books": books,
 	})
 }
@@ -74,7 +75,9 @@ func Single(c *gin.Context) {
 	}
 	book, err := model_book.Get(params.ID)
 	if err == nil {
-		c.JSON(http.StatusOK, book)
+		utils.FormatResponse(c, gin.H{
+			"book": book,
+		})
 		return
 	}
 	utils.HandleErrorNotFound(c, err)
