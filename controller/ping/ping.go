@@ -1,13 +1,13 @@
 package pingController
 
 import (
-	"net/http"
+	"jettster/utils"
 
 	"github.com/gin-gonic/gin"
 )
 
 func Ping(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{
+	utils.FormatResponse(c, gin.H{
 		"message": "pong",
 	})
 }
