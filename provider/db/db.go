@@ -9,7 +9,7 @@ import (
 )
 
 func Connect() {
-	err := mgm.SetDefaultConfig(nil, "go-gin", options.Client().ApplyURI(config.GetString("db.uri")))
+	err := mgm.SetDefaultConfig(nil, config.GetString("db.name"), options.Client().ApplyURI(config.GetString("db.uri")))
 	if err != nil {
 		fmt.Println(err)
 	}
