@@ -20,3 +20,4 @@
 config/default.json
 gin-bin
 /bin
+/docs
