@@ -1,4 +1,4 @@
-package dto_book
+package dto_book_request
 
 type List struct {
 	Count string `form:"count"`

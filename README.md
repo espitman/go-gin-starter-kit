@@ -4,7 +4,18 @@ The fast way to create a restful apis with Gin Framework with a structured proje
 
 ## how to start
 
+replace all jettster/ with ```${name}/```
+
+remove go.mod & go.sum
+
+```
+go mod init {$name}
+go mod tidy  
+```
+
 copy & rename config/default-sample.json to default.json
+
+swag init
 
 ### run in development mode
 
