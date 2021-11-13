@@ -40,10 +40,20 @@ func init() {
 }
 
 func createController(name string) {
+	createDto(name)
 	fmt.Println("createController: " + name)
 	f := NewFile(name + "Controller")
+	f.Comment("Single " + name)
+	f.Comment("@Summary Single " + name)
+	f.Comment("@ID single-" + name)
+	f.Comment("@Accept  json")
+	f.Comment("@Param id path string true \"url params\"")
+	f.Comment("@Success 200 {object} dto_" + name + "_response.Full")
+	f.Comment("@Failure 400 {object} dto_error.Error")
+	f.Comment("@Router /" + name + "/{id} [get]")
+
 	f.Func().Id("Ping").Params(Id("c").Params(Add(Op("*")).Qual("github.com/gin-gonic/gin", "Context"))).Block(
-		Id("c.JSON").Params(Qual("net/http", "StatusOK"), Id("gin.H{\"message\": \""+name+"\",}")),
+		Qual("jettster/utils", "FormatResponse").Params(Id("c"), Id("gin.H{\"ID\": \""+name+"\",}")),
 	)
 	buf := &bytes.Buffer{}
 	if err := f.Render(buf); err != nil {
@@ -61,7 +71,7 @@ func createRoute(name string) {
 	f := NewFile("route")
 	f.ImportAlias("jettster/controller/"+name, name+"Controller")
 	f.Func().Id("(t *T)").Id(strings.Title(name) + "Routes").Params().Block(
-		Id("t.router.GET").Params(Id("\"/"+name+"/ping\""), Qual("jettster/controller/"+name, "Ping")),
+		Id("t.router.GET").Params(Id("\"/"+name+"/:id\""), Qual("jettster/controller/"+name, "Ping")),
 	)
 	buf := &bytes.Buffer{}
 	if err := f.Render(buf); err != nil {
@@ -102,7 +112,7 @@ func createDto(name string) {
 }
 
 func createRequestDto(name string) {
-	f := NewFile("dto_" + name)
+	f := NewFile("dto_" + name + "_request")
 	f.Type().Id("Details").Struct(
 		Id("ID").String().Id("`uri:\"id\"`"),
 	)
@@ -116,9 +126,14 @@ func createRequestDto(name string) {
 }
 
 func createResponseDto(name string) {
-	f := NewFile("dto_" + name)
+	f := NewFile("dto_" + name + "_response")
+	f.Type().Id("Full_Payload").Struct(
+		Id("ID").Id("string").Id("`json:\"ID\"`"),
+	)
 	f.Type().Id("Full").Struct(
-		Id("ID").Qual("go.mongodb.org/mongo-driver/bson/primitive", "ObjectID").Id("`json:\"_id\"`"),
+		Id("Message").Id("string").Id("`json:\"message\"`"),
+		Id("Status").Id("int").Id("`json:\"status\"`"),
+		Id("Payload").Id("Full_Payload").Id("`json:\"payload\"`"),
 	)
 	buf := &bytes.Buffer{}
 	if err := f.Render(buf); err != nil {
