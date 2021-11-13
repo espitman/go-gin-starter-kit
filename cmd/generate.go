@@ -43,7 +43,8 @@ func createController(name string) {
 	fmt.Println("createController: " + name)
 	f := NewFile(name + "Controller")
 	f.Func().Id("Ping").Params(Id("c").Params(Add(Op("*")).Qual("github.com/gin-gonic/gin", "Context"))).Block(
-		Id("c.JSON").Params(Qual("net/http", "StatusOK"), Id("gin.H{\"message\": \""+name+"\",}")),
+		Qual("jettster/utils", "FormatResponse").Params(Id("c"), Id("gin.H{\"message\": \""+name+"\",}")),
+		//Id("utils.FormatResponse").Params(Id("c"), Id("gin.H{\"message\": \""+name+"\",}")),
 	)
 	buf := &bytes.Buffer{}
 	if err := f.Render(buf); err != nil {
